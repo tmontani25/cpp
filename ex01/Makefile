@@ -3,6 +3,7 @@ NAME = PhoneBook
 # Fichiers source
 SRC = Contact.cpp \
 	PhoneBook.cpp \
+	main.cpp \
 
 # Fichiers objets
 OBJ = $(SRC:.cpp=.o)

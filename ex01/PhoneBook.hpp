@@ -14,10 +14,10 @@ class PhoneBook {
 
 
 
-
     // methodes
-    void addContact(int index);
+    void addContact(void);
     void displayContact(int index);
+    void searchContact(int index);
 
 };
 #endif
