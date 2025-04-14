@@ -7,18 +7,37 @@ int main(void)
     class PhoneBook MyPhoneBook;
     std::string input;
 
-    std::cout << "enter cmd: " << std::endl;
-    std::getline(std::cin, input);
-
-    if (input.empty()){
-        std::cout << "error empty string input" << std::endl;
-        return (1);
-    }
-    if (input == "ADD")
+    while (1)
     {
-        std::cout << "ADD a contact" << std::endl;
-        MyPhoneBook.addContact();
 
+        std::cout << "enter cmd: " << std::endl;
+        std::getline(std::cin, input);
+
+
+        if (input.empty())
+        {
+            std::cout << "error empty string input" << std::endl;
+        }
+       else if (input == "ADD")
+        {
+            std::cout << "ADD MODE" << std::endl;
+            MyPhoneBook.addContact();
+        }
+        else if (input == "SEARCH")
+        {
+            std::cout << "SEARCH MODE" << std::endl;
+            MyPhoneBook.displayContacts();
+            // MyPhoneBook.searchContact();
+        }
+        else if (input == "EXIT")
+        {
+            std::cout << "EXITING PHONEBOOK..." << std::endl;
+            break;
+        }
+        else
+        {
+            std::cout << "invalid command" << std::endl;
+        }
     }
 
     // Contact MyContact;
@@ -34,5 +53,6 @@ int main(void)
     // std::cout << "Nickname: " << MyContact.getNickname() << std::endl;
     // std::cout << "Phone Number: " << MyContact.getPhoneNumber() << std::endl;
     // std::cout << "Darkest Secret: " << MyContact.getDarkestSecret() << std::endl;
+    return (0);
     
 }

@@ -3,33 +3,21 @@
 
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 class Contact {
     private:
         std::string firstName;
         std::string lastName;
-        std::string nickname;
+        std::string nickName;
         std::string phoneNumber;
         std::string darkestSecret;
     public:
         Contact() 
-            : firstName(""), lastName(""), nickname(""), phoneNumber(""), darkestSecret("") {}
+            : firstName(""), lastName(""), nickName(""), phoneNumber(""), darkestSecret("") {}
 
-        void setFirstName(std::string newFirstName) {
-            firstName = newFirstName;
-        }
-        void setLastName(std::string newLastName) {
-            lastName = newLastName;
-        }
-        void setNickname(std::string newNickname) {
-            nickname = newNickname;
-        }
-        void setPhoneNumber(std::string newPhoneNumber) {
-            phoneNumber = newPhoneNumber;
-        }
-        void setDarkestSecret(std::string newDarkestSecret) {
-            darkestSecret = newDarkestSecret;
-        }
+        void setInfo();
+
         // getters pour pouvoir acceder aux attributs privés
         std::string getFirstName() {
             return (firstName);
@@ -38,7 +26,7 @@ class Contact {
             return (lastName);
         }
         std::string getNickname() {
-            return (nickname);
+            return (nickName);
         }
         std::string getPhoneNumber() {
             return (phoneNumber);

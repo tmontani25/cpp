@@ -5,15 +5,37 @@
 
 void PhoneBook::addContact()
 {
-    // si moins de 8 contact ajoute a la suite sinon remplace le plus ancien
+    int index;
+    
+    index = contactCount % 8;
 
     if (contactCount < 8)
     {
         contacts[contactCount].setInfo();
         contactCount++;
     }
+    else
+    {
+        contacts[index].setInfo();
+        contactCount = 8;
+    }
+    
 }
-void PhoneBook::displayContact(int index)
+void PhoneBook::displayContacts(void)
 {
-    (void)index;
+
+    if (contactCount == 0)
+    {
+        std::cout << "NO CONTACTS..." << std::endl;
+        return ;
+    }
+
+    std::cout << "  Index | First Name | Last Name  | Nickname" << std::endl;
+
+    for (int i = 0; i < contactCount; ++i) {
+        std::cout << std::setw(6) << std::right << i << " | ";  // Index
+        std::cout << std::setw(10) << std::right << contacts[i].getFirstName() << " | ";  // First name
+        std::cout << std::setw(10) << std::right << contacts[i].getLastName() << " | ";  // Last name
+        std::cout << std::setw(10) << std::right << contacts[i].getNickname() << std::endl;  // Nickname
+    }
 }
