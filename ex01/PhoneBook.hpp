@@ -18,9 +18,8 @@ class PhoneBook {
 
 
     // methodes
-    void addContact(void);
-    void displayContacts(void);
-    void searchContact(int index);
+    int addContact(void);
+    int displayContacts(int index);
 
 };
 #endif

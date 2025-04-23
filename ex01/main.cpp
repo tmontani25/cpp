@@ -6,30 +6,47 @@ int main(void)
 
     class PhoneBook MyPhoneBook;
     std::string input;
+    int exit_flag = 0;
 
     while (1)
     {
 
         std::cout << "enter cmd: " << std::endl;
-        std::getline(std::cin, input);
+        if (!std::getline(std::cin, input))
+        {
+            std::cout << "EXITING PHONEBOOK..." << std::endl;
+            break;
+        }
 
 
         if (input.empty())
         {
             std::cout << "error empty string input" << std::endl;
         }
+
+
+
+
        else if (input == "ADD")
         {
             std::cout << "ADD MODE" << std::endl;
-            MyPhoneBook.addContact();
+            if(!MyPhoneBook.addContact())
+            {
+                std::cout << "EXITING PHONEBOOK..." << std::endl;
+                break;
+            }
         }
+
+
         else if (input == "SEARCH")
         {
             std::cout << "SEARCH MODE" << std::endl;
-            MyPhoneBook.displayContacts();
+            MyPhoneBook.displayContacts(-1);
             // MyPhoneBook.searchContact();
         }
-        else if (input == "EXIT")
+
+
+        else if (input == "EXIT" || exit_flag == 2)
         {
             std::cout << "EXITING PHONEBOOK..." << std::endl;
             break;
@@ -39,20 +56,6 @@ int main(void)
             std::cout << "invalid command" << std::endl;
         }
     }
-
-    // Contact MyContact;
-
-    // MyContact.setFirstName("John");
-    // MyContact.setLastName("Molkyboss");
-    // MyContact.setNickname("Molking");
-    // MyContact.setPhoneNumber("0797092412");
-    // MyContact.setDarkestSecret("je suis une fourmi");
-    // //print
-    // std::cout << "First Name: " << MyContact.getFirstName() << std::endl;
-    // std::cout << "Last Name: " << MyContact.getLastName() << std::endl;
-    // std::cout << "Nickname: " << MyContact.getNickname() << std::endl;
-    // std::cout << "Phone Number: " << MyContact.getPhoneNumber() << std::endl;
-    // std::cout << "Darkest Secret: " << MyContact.getDarkestSecret() << std::endl;
     return (0);
     
 }

@@ -16,7 +16,7 @@ class Contact {
         Contact() 
             : firstName(""), lastName(""), nickName(""), phoneNumber(""), darkestSecret("") {}
 
-        void setInfo();
+        int setInfo();
 
         // getters pour pouvoir acceder aux attributs privés
         std::string getFirstName() {
