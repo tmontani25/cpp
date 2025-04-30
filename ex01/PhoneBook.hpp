@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <cstdlib>
 
 class PhoneBook {
     private:
@@ -20,6 +21,7 @@ class PhoneBook {
     // methodes
     int addContact(void);
     int displayContacts(int index);
+    int searchContacts(int index);
 
 };
 #endif

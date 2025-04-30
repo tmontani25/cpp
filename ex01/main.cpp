@@ -42,6 +42,7 @@ int main(void)
         {
             std::cout << "SEARCH MODE" << std::endl;
             MyPhoneBook.displayContacts(-1);
+            MyPhoneBook.searchContacts(0);
             // MyPhoneBook.searchContact();
         }
 
