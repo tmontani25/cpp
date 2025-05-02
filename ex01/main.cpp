@@ -41,9 +41,14 @@ int main(void)
         else if (input == "SEARCH")
         {
             std::cout << "SEARCH MODE" << std::endl;
-            MyPhoneBook.displayContacts(-1);
-            MyPhoneBook.searchContacts(0);
-            // MyPhoneBook.searchContact();
+            if (MyPhoneBook.displayContacts(-1) != -1)
+            {
+                if(!MyPhoneBook.searchContacts(0))
+                {
+                    std::cout << "EXITING PHONEBOOK..." << std::endl;
+                    break;
+                }
+            }
         }
 
 

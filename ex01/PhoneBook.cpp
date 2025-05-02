@@ -17,6 +17,18 @@ int PhoneBook::addContact()
         }
         contactCount++;
     }
+    else if (contactCount == 8)
+    {
+        std::cout << "PhoneBook is full, overwriting contact at index 7" << index << std::endl;
+        for (int i = 7; i > 0; --i)
+        {
+            contacts[i] = contacts[i - 1];
+        }
+        if(!contacts[0].setInfo())
+        {
+            return (0);
+        }
+    }
     else
     {
         if(!contacts[index].setInfo())
@@ -63,10 +75,17 @@ int PhoneBook::searchContacts(int index)
     std::cout << "Enter the index of the contact you want to search for: ";
     do
     {
-        std::getline(std::cin, input);
+        if(!std::getline(std::cin, input))
+        {
+            return (0);
+        }
         if (input.empty())
         {
             std::cout << "error empty string input" << std::endl;
+        }
+        if (input == "EXIT")
+        {
+            return (0);
         }
         index = atoi(input.c_str());
         if (index < 0 || index >= contactCount)
