@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     }
 
     // Lire le contenu du fichier
-    std::ifstream infile(filename);
+    std::ifstream infile(filename.c_str());
     if (!infile) {
         std::cerr << "Error: Cannot open file '" << filename << "' for reading." << std::endl;
         return 1;
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     std::string replaced = replaceAll(content, s1, s2);
 
     // Écriture dans le nouveau fichier
-    std::ofstream outfile(filename + ".replace");
+    std::ofstream outfile((filename + ".replace").c_str());
     if (!outfile) {
         std::cerr << "Error: Cannot open file '" << filename << ".replace' for writing." << std::endl;
         return 1;

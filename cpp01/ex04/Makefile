@@ -2,7 +2,7 @@ NAME = sed
 
 # Source files
 SRC = main.cpp \
-	harl.cpp \
+
 
 # Object files
 OBJ = $(SRC:.cpp=.o)
