@@ -1,7 +1,7 @@
 #include "FragTrap.hpp"
 
 int main() {
-    FragTrap f("Billy");
+    FragTrap f("protoooooooon");
     f.attack("enemy");
     f.highFivesGuys();
     return 0;
