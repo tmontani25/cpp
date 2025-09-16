@@ -1,6 +1,7 @@
-NAME = 
+NAME = Bureaucrat
 
-SRC = 
+SRC =  Bureaucrat.cpp \
+       main.cpp
 OBJ = $(SRC:.cpp=.o)
 
 CXX = c++
