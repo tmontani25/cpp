@@ -1,0 +1,33 @@
+⚙️ Ce que la classe doit faire
+
+Avoir deux attributs privés :
+name (const)
+grade (modifiable)
+
+Contrôler la validité du grade à la création :
+si trop haut (< 1) → exception GradeTooHighException
+si trop bas (> 150) → exception GradeTooLowException
+
+Fournir des getters :
+getName()
+getGrade()
+
+Pouvoir changer le grade :
+incrementGrade() → améliore le grade (diminue la valeur)
+decrementGrade() → baisse le grade (augmente la valeur)
+
+ces fonctions doivent aussi lancer des exceptions si le grade sort des limites
+
+Contenir deux classes d’exception internes :
+
+GradeTooHighException
+
+GradeTooLowException
+(chacune renvoie un message d’erreur clair avec what())
+
+Surcharger l’opérateur << pour afficher :
+
+<name>, bureaucrat grade <grade>.
+
+
+Respecter la forme canonique (constructeur par défaut, copie, destructeur, opérateur d’affectation).

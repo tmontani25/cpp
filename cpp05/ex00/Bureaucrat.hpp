@@ -1,13 +1,20 @@
 #pragma once
+#include <string>
+#include <iostream> 
 
 //class bureaucrat simple avec un grade
 // membres qui permette de verifier le grade
 
-class bureaucrat {
+class Bureaucrat {
     private:
         int grade;
+        const std::string  name;
     public:
-        bureaucrat(int grd) : grade(grd){}
+        Bureaucrat(const std::string &n, int g) : name(n), grade(g){}
+        //copie
+        Bureaucrat(Bureaucrat const &other){}
+        
 
-        grade_too_high
+        //operateur
+
 };
