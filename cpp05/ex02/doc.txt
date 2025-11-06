@@ -1,0 +1,75 @@
+Liste des étapes à implémenter pour ex02 (AForm et formulaires concrets)
+
+1) Concevoir l'interface AForm (anciennement Form)
+   - Attributs privés : name, isSigned, gradeToSign, gradeToExec
+   - Constructeurs : initialiseur (avec target/name), constructeur de copie
+   - Destructeur virtual
+   - Getters : getName(), isSigned(), getGradeToSign(), getGradeToExec()
+   - Méthode beSigned(Bureaucrat const&)
+   - Méthode publique execute(Bureaucrat const&) const qui vérifie les préconditions
+     et délègue l'exécution à une méthode protégée pure-virtual action() const
+   - Exceptions associées (GradeTooHigh, GradeTooLow, FormNotSigned)
+
+2) Implémenter les exceptions d'AForm
+   - Classes d'exceptions (ou classes imbriquées) avec what() noexcept
+   - Messages explicites pour faciliter le debug
+
+3) Implémenter beSigned dans AForm
+   - Vérifier le grade du Bureaucrat via getGrade()
+   - Lancer GradeTooLowException si insuffisant, sinon marquer signed = true
+
+4) Implémenter execute(Bureaucrat const&) const dans AForm
+   - Vérifier que le formulaire est signé (sinon FormNotSignedException)
+   - Vérifier que le grade d'exécution est suffisant (sinon GradeTooLowException)
+   - Appeler la méthode protégée pure-virtual action() const
+
+5) Créer ShrubberyCreationForm
+   - Constructeur prend target (std::string)
+   - Grades requis : sign 145, exec 137
+   - action() : créer le fichier <targe-t>_shrubbery et écrire des arbres ASCII
+   - Gérer erreurs d'I/O (lancer exception si échec d'écriture)
+
+6) Créer RobotomyRequestForm
+   - Constructeur prend target
+   - Grades requis : sign 72, exec 45
+   - action() : afficher bruits de forage, utiliser RNG pour réussite 50% du temps
+   - Initialiser le seed du RNG de façon appropriée
+
+7) Créer PresidentialPardonForm
+   - Constructeur prend target
+   - Grades requis : sign 25, exec 5
+   - action() : afficher que <target> a été pardonné par Zaphod Beeblebrox
+
+8) Mettre à jour Bureaucrat
+   - Ajouter executeForm(AForm const& form) const
+   - Tenter d'exécuter, catcher exceptions et afficher :
+       Succès : "<bureaucrat> executed <form>"
+       Échec : message d'erreur explicite (inclure e.what())
+
+9) Mettre à jour includes et renommages
+   - Remplacer Form par AForm partout (headers, forward declarations)
+   - S'assurer que les includes sont cohérents
+
+10) Rédiger main.cpp de tests
+    - Scénarios : signature/exécution réussies et ratées, formulaire non signé,
+      test Shrubbery (création de fichier), test Robotomy (aléatoire)
+
+11) Mettre à jour / écrire le Makefile
+    - Cibles : all, clean, fclean, re
+    - Compiler tous les .cpp de ex02 avec les flags demandés
+
+12) Ajouter tests d'erreurs et cas limites
+    - Exécution sans signature, grades trop bas, erreurs d'I/O, messages what()
+
+13) Vérifier règles de copie / assignation
+    - Implémenter ou désactiver copie/assignation proprement
+
+14) Compiler, corriger warnings et valider manuellement
+    - S'assurer d'une compilation propre et de tests fonctionnels
+
+15) Documenter et préparer la remise
+    - README dans ex02/ expliquant compilation et tests
+    - Fichiers à rendre : Makefile, main.cpp, Bureaucrat.*, AForm.*,
+      ShrubberyCreationForm.*, RobotomyRequestForm.*, PresidentialPardonForm.*
+
+Fin du document.
