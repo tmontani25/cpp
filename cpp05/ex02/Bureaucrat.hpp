@@ -34,7 +34,9 @@ class Bureaucrat {
         ~Bureaucrat(){}
 
         //methodes
-        void signForm(Form& form);
+        void signForm(AForm& form);
+            //ajout methode execution
+        void executeForm(AForm& form);
         void incrementGrade();
         void decrementGrade();
         friend std::ostream& operator<<(std::ostream &os, const Bureaucrat& b);

@@ -1,8 +1,11 @@
 #include "Bureaucrat.hpp"
 
 
-//constructeur de copie
+//******************* constructeur de copie ***********************
+
 Bureaucrat::Bureaucrat(Bureaucrat const &other) : grade(other.grade), name(other.name) {}
+
+//************************** methodes increment decrement ************* */
 
 void Bureaucrat::incrementGrade() {
     if (grade - 1 < 1)
@@ -16,7 +19,8 @@ void Bureaucrat::decrementGrade() {
     grade++;
 }
 
-    //getters
+
+//***************** getters *****************************
 
     int Bureaucrat::getGrade()const{
         return this->grade;
@@ -25,17 +29,18 @@ void Bureaucrat::decrementGrade() {
         return this->name;
     }
 
-// Implémentation de what() pour GradeTooHighException
+// ************************ Implémentation de what() ******************
+
 const char* Bureaucrat::GradeTooHighException::what() const throw() {
     return "Grade too high: grade cannot be higher than 1";
 }
 
-// Implémentation de what() pour GradeTooLowException
 const char* Bureaucrat::GradeTooLowException::what() const throw() {
     return "Grade too low: grade cannot be lower than 150";
 }
 
-// surcharge operateur << 
+// ********************* surcharge operateur<< ***********************
+
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& b) {
     os << b.name << ", bureaucrat grade " << b.grade;
     return os;

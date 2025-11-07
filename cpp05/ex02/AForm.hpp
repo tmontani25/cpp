@@ -12,21 +12,28 @@ class AForm {
     private:
     
     const std::string name;
-    bool is_signed;
+    bool isSigned;
     const int grade_sign;
     const int grade_ex;
 
-    protected:
-    virtual void action() const = 0; // <-- méthode pure-virtuelle : rend la classe abstraite
-
-    public:
+    public :
+    
+  
 
     AForm(const std::string& name, int signGrade, int execGrade);
     AForm(const Form& other);
     virtual ~AForm();
 
+    //fonction a implementer dans chaque classe concrete pour executer
+    virtual void execute(const Bureaucrat const &executor);
+  
+      //fonction check d'execution dans execute
+    void executeCheck(const Bureaucrat &executor) const;//executor le bureaucrat qui veut executer
+
+
     // Fonction pour signer le formulaire
     void beSigned(Bureaucrat const& bureaucrat);
+
         // Getters
     const std::string& getName() const;
     bool getIsSigned() const;
@@ -38,6 +45,11 @@ class AForm {
         virtual const char* what() const throw();
     };
     class GradeTooLowException : public std::exception {
+        virtual const char* what() const throw(); //virtual permet d'utiliser sa propre implementation
+    };
+
+        //ajout de l'exception not signed 
+    class NotSignedException : public std::exception{
         virtual const char* what() const throw();
     };
 

@@ -1,7 +1,23 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
+#include "PresidentialPardonForm.hpp"
 
-int main (void){
+
+
+int main (void)
+{
+    Bureaucrat bob("Bob", 1);  
+    Bureaucrat alice("Alice", 150); 
+    PresidentialPardonForm presidential_test;
+
+    bob.signForm(presidential_test);
+    std::cout << presidential_test.getIsSigned()<<std::endl; // signe ou non
+    bob.executeForm(presidential_test);
+    
+
+    
+}
+/*int main (void){
     // Création sur la pile (stack)
     Bureaucrat bob("Bob", 1);          // Crée un Bureaucrat nommé "Bob" de grade 1
     Bureaucrat alice("Alice", 150);     // Crée un Bureaucrat nommé "Alice" de grade 150
@@ -138,4 +154,4 @@ int main (void){
     delete pablo;
 
     return 0;
-}
+}*/

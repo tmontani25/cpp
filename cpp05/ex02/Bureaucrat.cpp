@@ -1,5 +1,5 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
 
 //******************* constructeur de copie ***********************
@@ -47,9 +47,9 @@ std::ostream& operator<<(std::ostream& os, const Bureaucrat& b) {
     return os;
 }
 
-//**************************** signature form *********************** */
+//**************************** signature and execute form *********************** */
 
-void Bureaucrat::signForm(Form& form) {
+void Bureaucrat::signForm(AForm& form) {
     try {
         form.beSigned(*this);
         std::cout << this->getName() << " signed " << form.getName() << std::endl; //executé seulement si l'exception dans beSigned n'est pas lancee
@@ -58,4 +58,16 @@ void Bureaucrat::signForm(Form& form) {
         std::cout << this->getName() << " couldn't sign " << form.getName() 
                   << " because " << e.what() << std::endl;
     }
+}
+
+void Bureaucrat::executeForm(AForm& form){
+    try {
+        form.execute(*this);
+        std::cout << this->getName() << " executed " << form.getName() << std::endl;
+    }
+    catch (const std::exception& e)
+    {
+     std::cout << this->
+    }
+
 }
