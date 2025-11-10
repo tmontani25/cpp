@@ -5,7 +5,7 @@
 #include <iostream> 
 #include <exception>
 
-class Form;  // Forward declaration pour la fonction signForm
+class AForm;  // Forward declaration pour la fonction signForm
 
 
 //class bureaucrat simple avec un grade
@@ -36,7 +36,7 @@ class Bureaucrat {
         //methodes
         void signForm(AForm& form);
             //ajout methode execution
-        void executeForm(AForm& form);
+        void executeForm(AForm const &form)const;
         void incrementGrade();
         void decrementGrade();
         friend std::ostream& operator<<(std::ostream &os, const Bureaucrat& b);

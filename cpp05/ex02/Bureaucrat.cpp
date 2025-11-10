@@ -55,19 +55,27 @@ void Bureaucrat::signForm(AForm& form) {
         std::cout << this->getName() << " signed " << form.getName() << std::endl; //executé seulement si l'exception dans beSigned n'est pas lancee
     }
     catch (const std::exception& e) {
-        std::cout << this->getName() << " couldn't sign " << form.getName() 
+        std::cout << this->getName() << " couldn't sign " << form.getName()
                   << " because " << e.what() << std::endl;
     }
 }
 
-void Bureaucrat::executeForm(AForm& form){
+void Bureaucrat::executeForm(AForm const &form) const
+{
     try {
         form.execute(*this);
         std::cout << this->getName() << " executed " << form.getName() << std::endl;
     }
-    catch (const std::exception& e)
-    {
-     std::cout << this->
+    catch (const AForm::NotSignedException& e) {
+        std::cout << this->getName() << " couldn't execute " << form.getName() 
+                  << " because form is not signed" << std::endl;
     }
-
+    catch (const AForm::GradeTooLowException& e) {
+        std::cout << this->getName() << " couldn't execute " << form.getName() 
+                  << " because grade is too low" << std::endl;
+    }
+    catch (const std::exception& e) {  // Catch générique pour toute autre exception
+        std::cout << this->getName() << " couldn't execute " << form.getName() 
+                  << " because: " << e.what() << std::endl;
+    }
 }

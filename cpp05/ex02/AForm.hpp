@@ -21,11 +21,12 @@ class AForm {
   
 
     AForm(const std::string& name, int signGrade, int execGrade);
-    AForm(const Form& other);
+    AForm(const AForm& other);
     virtual ~AForm();
 
     //fonction a implementer dans chaque classe concrete pour executer
-    virtual void execute(const Bureaucrat const &executor);
+    virtual void execute(Bureaucrat const &executor) const = 0; // = 0 force l'implementation dans chaque classe concrete
+
   
       //fonction check d'execution dans execute
     void executeCheck(const Bureaucrat &executor) const;//executor le bureaucrat qui veut executer
@@ -54,7 +55,7 @@ class AForm {
     };
 
         // Surcharge d'opérateur (déclaration)
-    friend std::ostream& operator<<(std::ostream& os, const Form& form);
+    friend std::ostream& operator<<(std::ostream& os, const AForm& form);
     
 
 };

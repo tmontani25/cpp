@@ -73,10 +73,6 @@ const char *AForm::NotSignedException :: what() const throw()
     return "Form not signed";
 }
 
-const char* AForm::NotSignedException::what() const throw()
-{
-    return "Form is not signed";
-}
 
 // ****************** Surcharge d'opérateur *********************
 std::ostream& operator<<(std::ostream& os, const AForm& form)
