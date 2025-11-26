@@ -19,7 +19,18 @@ class Span{
             throw std::invalid_argument("la capacite du span doit etre > 0\n");
         }
     }
-    // constructeur de copie
+       // constructeur de copie
+     Span(const Span &other) : N(other.N), v(other.v) {}
+
+    Span &operator=(const Span &other){
+        if (this != &other){
+            this->N = other.N;
+            this->v = other.v;
+        }
+        return *this;
+    }
+ 
+
     // constructeur assignation =
     // destructeur
 
