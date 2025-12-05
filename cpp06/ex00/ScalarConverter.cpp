@@ -4,7 +4,10 @@
 namespace { // namespace permet de rien avoir dans le .hpp et utiliser les fonctions
     void printChar(double value) {
         std::cout << "char: ";
-        if (value < 0 || value > 255) {
+        if (std::isnan(value) || std::isinf(value)) {
+            std::cout << "impossible";
+        }
+        else if (value < 0 || value > 255) {
             std::cout << "impossible";
         }
         else if (value < 32 || value > 126) {
@@ -18,7 +21,10 @@ namespace { // namespace permet de rien avoir dans le .hpp et utiliser les fonct
 
     void printInt(double value) {
         std::cout << "int: ";
-        if (value > INT_MAX || value < INT_MIN) {
+        if (std::isnan(value) || std::isinf(value)) {
+            std::cout << "impossible";
+        }
+        else if (value > INT_MAX || value < INT_MIN) {
             std::cout << "impossible";
         }
         else {
@@ -70,6 +76,7 @@ void ScalarConverter::convert(const std::string& literal){
     // 1. Pseudo-literals d'abord
     if (literal == "nan" || literal == "nanf" || literal == "+inf" || literal == "-inf" || 
         literal == "+inff" || literal == "-inff") {
+            std::cout << "test nan\n";
         type = PSEUDO;
     }
     // 2. Char literal : exactement 3 caractères 'a'
