@@ -87,12 +87,9 @@ int main (void)
     std::cout<<"allez jp execute nous ca\n";
     jean_pascal.executeForm(test2);
 
-
-    
-    
-
-    
 }
+    
+    
 /*int main (void){
     // Création sur la pile (stack)
     Bureaucrat bob("Bob", 1);          // Crée un Bureaucrat nommé "Bob" de grade 1

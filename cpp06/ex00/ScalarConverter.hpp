@@ -38,3 +38,4 @@ private:
 public:
     static void convert(const std::string& literal);
 };
+

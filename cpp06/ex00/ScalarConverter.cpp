@@ -1,6 +1,7 @@
 #include "ScalarConverter.hpp"
 
-namespace {
+// affiche tout les type
+namespace { // namespace permet de rien avoir dans le .hpp et utiliser les fonctions
     void printChar(double value) {
         std::cout << "char: ";
         if (value < 0 || value > 255) {
@@ -54,7 +55,7 @@ namespace {
         std::cout << std::endl;
     }
 
-    void printAllTypes(double value) {
+    void printAllTypes(double value) { // print chaque type
         printChar(value);
         printInt(value);
         printFloat(value);
@@ -91,21 +92,23 @@ void ScalarConverter::convert(const std::string& literal){
         type = INVALID;
     }
 
-    // Conversion et affichage selon le type
+    // Conversion et affichage selon le type double est la plus grande valeur
     double value = 0.0;
     
+    // sert a tout caster en double et assigner a value
+
     switch (type) {
         case CHAR:
-            value = static_cast<double>(literal[1]); // Le caractère entre les quotes
+            value = static_cast<double>(literal[1]); // assigne value a l'input
             break;
         case INT:
         case FLOAT:
         case DOUBLE:
-            value = atof(literal.c_str());
+            value = atof(literal.c_str()); //assigne value a l'input (atof str to double)
             break;
         case PSEUDO:
             if (literal == "nan" || literal == "nanf") {
-                value = std::numeric_limits<double>::quiet_NaN();
+                value = std::numeric_limits<double>::quiet_NaN(); // quiet_NaN ne lance pas d'exceptions 
             }
             else if (literal == "+inf" || literal == "+inff") {
                 value = std::numeric_limits<double>::infinity();

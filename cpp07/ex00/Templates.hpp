@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 template <typename T>
-void swap(T& a, T& b){  // ← CORRECTION : Références T& au lieu de T
+void swap(T& a, T& b){ 
 
     T temp = a;  // Plus concis
     a = b;       // Modifie la variable originale

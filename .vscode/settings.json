@@ -69,6 +69,16 @@
         "ratio": "cpp",
         "variant": "cpp",
         "__nullptr": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "complex": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "sstream": "cpp",
+        "stack": "cpp",
+        "__string": "cpp",
+        "filesystem": "cpp",
+        "set": "cpp",
+        "__tree": "cpp",
+        "list": "cpp"
     }
 }
