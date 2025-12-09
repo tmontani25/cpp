@@ -12,11 +12,11 @@
 template <typename T>
 typename T::iterator easyfind(T &container, int value){
     //trouver l'occurence de value dans container
-    typename T::iterator it;
+    typename T::iterator it; // iterator container
     it = std::find(container.begin(), container.end(), value);
     if (it == container.end())
         throw std::out_of_range("Valeur non trouvée");
-    return it;
+    return it; // return l'iterator si l'occurence est trouvee
 }
 
 #endif

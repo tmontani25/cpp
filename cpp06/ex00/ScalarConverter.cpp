@@ -103,6 +103,7 @@ void ScalarConverter::convert(const std::string& literal){
     double value = 0.0;
     
     // sert a tout caster en double et assigner a value
+    // mon enum sert a caster en fonction du type
 
     switch (type) {
         case CHAR:

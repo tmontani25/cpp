@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-template <typename T>
+template <typename T> // va fonctionner avec n'importe quel type qui respecte les contraintes de la fonction
 void swap(T& a, T& b){ 
 
     T temp = a;  // Plus concis
