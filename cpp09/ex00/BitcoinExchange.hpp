@@ -3,11 +3,14 @@
 #include <fstream>
 #include <map>
 #include <iomanip>
+#include <cstdlib>
+#include <cctype>
 
 class BitcoinExchange{
     private:
-    bool parseLine(std::string line, char delimiter, std::string &date, double &price);
+    bool parseLine(std::string line, char delimiter, std::string &date, double &value);
     std::map<std::string, double> _database;
+    std::string trim(const std::string& str);
 
     public:
     BitcoinExchange(){};
@@ -16,7 +19,10 @@ class BitcoinExchange{
 
     //fonctions
     bool loadDatabase(std::string &filename);
-    void printDatabase();
+    void printDatabaseMap();
+    bool processInputFile(const std::string &inputFile);
+    bool checkInputFormat(const std::string &date, const double &nbBtc);
+
 
     
     // //getter
