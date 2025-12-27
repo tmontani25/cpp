@@ -1,5 +1,14 @@
 #include "BitcoinExchange.hpp"
 
+bool BitcoinExchange::isBissextile(const std::string &year){
+
+    int yearValue = atoi(year.c_str());
+
+    if(yearValue % 400 == 0 || yearValue % 4 == 0)
+        return true;
+    
+    return false;
+}
 std::string BitcoinExchange::trim(const std::string& str) {
     size_t start = str.find_first_not_of(" \t\n\r");
     if (start == std::string::npos)
@@ -74,8 +83,18 @@ bool BitcoinExchange::parseLine(std::string line, char delimiter, std::string &d
 
     char *end;
     double temp = strtod(priceStr.c_str(), &end); //convertit PriceStr en double
-    if (end == priceStr.c_str() || *end != '\0'){  // Erreur de conversion end pointe la ou la conversion s'arrete
+    if (end == priceStr.c_str() || *end != '\0'){  // Erreur de conversion end pointe la ou la conversion s'arrete si pointe au debut de la chaine rien n'a ete converti
         std::cerr<< "Error bad input => " << line << std::endl; //valeur completement non digit detectee ex: 2012-01-11 | abc ou 2012-01-11 | (rien)
+        return false;
+    }
+        // test valeur nan ou Inf en input
+    if (std::isnan(temp) || std::isinf(temp)) {
+        std::cerr << "Error bad input => " << line << std::endl;
+        return false;
+    }
+    // test -0 accepte par strtod()
+    if (temp == 0 && priceStr.find('-') != std::string::npos) {
+        std::cerr << "Error: not a positive number." << std::endl;
         return false;
     }
     value = temp;
@@ -95,9 +114,8 @@ void BitcoinExchange::printDatabaseMap(){
 }
 
 
-bool BitcoinExchange::checkInputFormat(const std::string &date, const double &nbBtc){
-    //check format date
-    (void)nbBtc;
+bool BitcoinExchange::checkDateFormat(const std::string &date){
+
     if (date.length() != 10)
         return false;
     
@@ -111,6 +129,44 @@ bool BitcoinExchange::checkInputFormat(const std::string &date, const double &nb
                 return false;
         }
     }
+
+    // si format ok check si les chiffres sont ok pour une date
+    // je stock dans une string mois et journje check le nombre
+
+    std::string month;
+    std::string day;
+
+    month = date.substr(5, 7);
+    int monthValue = atoi(month.c_str());
+    if (monthValue < 1 || monthValue > 12)
+        return false;
+
+
+    day = date.substr(8, 9);
+    int dayValue = atoi(day.c_str());
+    if (dayValue == 0)
+        return false;
+    // checker les dates qui n'existe pas mois de 30 jours  Avril(4), Juin(6), Septembre(9), Novembre(11)
+    if (monthValue == 4 || monthValue ==  6 || monthValue == 9 || monthValue == 11){
+        if (dayValue > 30)
+            return false;
+    }
+    else if(monthValue == 2){ // fevrier check annee bisextile
+        std::string year = date.substr(0, 3);
+        if(isBissextile(year)){
+            if (dayValue > 29)
+                return false;
+        }
+        else{
+            if (dayValue > 28)
+                return false;
+        }
+    }
+    else{ // les mois a 31 jours
+        if (dayValue > 31)
+            return false;
+    }
+
     return true;
 }
 
@@ -135,8 +191,8 @@ bool BitcoinExchange::processInputFile(const std::string &inputFile){
         if (!parseLine(line, '|', date, nbBtc))
             continue;// skip cette ligne
         
-        if(!checkInputFormat(date, nbBtc)){
-            std::cerr << "Error format =>" << date << std::endl;
+        if(!checkDateFormat(date)){
+            std::cerr << "Error format => " << date << std::endl;
                 continue;
         }
             
@@ -164,7 +220,7 @@ bool BitcoinExchange::processInputFile(const std::string &inputFile){
 
             double price = it->second;
             result = price * nbBtc;
-            std::cout << date << " => " << nbBtc << " = " << result << std::endl;;
+            std::cout << date << " => " << nbBtc << " = " << result << std::endl;
             continue;
         }
 

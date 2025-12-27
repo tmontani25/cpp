@@ -21,7 +21,8 @@ class BitcoinExchange{
     bool loadDatabase(std::string &filename);
     void printDatabaseMap();
     bool processInputFile(const std::string &inputFile);
-    bool checkInputFormat(const std::string &date, const double &nbBtc);
+    bool checkDateFormat(const std::string &date);
+    bool isBissextile(const std::string &year);
 
 
     
