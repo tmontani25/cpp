@@ -12,8 +12,11 @@ int main(int argc, char **argv){
     std::vector<int> Vnumbers = parseNumbers(argc, argv);
     printBefore(Vnumbers);
     std::deque<int> Dnumbers(Vnumbers.begin(), Vnumbers.end());
-    mergeInsertSort(Vnumbers);
-    //mergInsertSort(Dnumbers);
+    
+    std::vector<int> sortedV = mergeInsertSort(Vnumbers);
+    std::deque<int> sortedD = mergeInsertSort(Dnumbers);
+    
+    // TODO: Afficher les résultats et les temps de tri
 
     return 0;
 }
@@ -43,3 +46,17 @@ int main(int argc, char **argv){
 //   Résultat : [5, 7, 8, 9]
 
 // Retour au problème principal avec les max triés : [5, 7, 8, 9]
+
+
+
+// std::vector<int> Vnumbers = parseNumbers(argc, argv);
+// std::deque<int> Dnumbers(Vnumbers.begin(), Vnumbers.end());
+
+// // Comparaison de performances :
+// auto start1 = std::chrono::high_resolution_clock::now();
+// std::vector<int> sortedV = mergeInsertSort(Vnumbers);
+// auto end1 = std::chrono::high_resolution_clock::now();
+
+// auto start2 = std::chrono::high_resolution_clock::now(); 
+// std::deque<int> sortedD = mergeInsertSort(Dnumbers);
+// auto end2 = std::chrono::high_resolution_clock::now();

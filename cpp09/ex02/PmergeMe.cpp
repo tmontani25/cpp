@@ -56,12 +56,45 @@ void    sortPairs(std::vector<std::pair<int, int> > &pairs){
     }
 }
 
+std::vector<int> extractMax(std::vector<std::pair<int, int> > &pairs){
+
+    std::vector<int> maxList;
+    for (size_t i = 0; i < pairs.size(); i++){
+        maxList.push_back(pairs[i].second);
+    }
+    return maxList;
+}
+std::vector<int> extractMin(std::vector<std::pair<int, int> > &pairs){
+
+    std::vector<int> minList;
+    for (size_t i = 0; i < pairs.size(); i++){
+        minList.push_back(pairs[i].first);
+    }
+    return minList;
+}
+
+
 
 template <typename Container>
-void mergeInsertSort(Container& container){
+void insertMin(std::vector<std::pair<int, int> >& pairs, Container& sortedMax) {
+    for (size_t i = 0; i < pairs.size(); i++) {
+        int minToInsert = pairs[i].first;   // Le minimum à insérer
+        int associatedMax = pairs[i].second; // Son maximum associé
+        
+        // Trouver l'index de associatedMax dans sortedMax
+        int maxIndex = findIndex(sortedMax, associatedMax);
+        
+        // Insérer minToInsert par recherche binaire
+        // (en sachant qu'il doit être ≤ associatedMax)
+        binaryInsert(sortedMax, minToInsert, maxIndex);
+    }
+}
+
+template <typename Container>
+Container mergeInsertSort(Container& container){
 
     if (container.size() <= 1)
-        return;
+        return container;
     std::vector<std::pair<int , int> > pairs = formPairs(container);
     
     std::cout << "before sort\n";
@@ -69,30 +102,21 @@ void mergeInsertSort(Container& container){
         std::cout<< pairs[i].first << pairs[i].second << std::endl;
     }
 
-    sortPairs(pairs);
+   sortPairs(pairs);  // sortPairs modifie pairs en place
     std::cout << "after sort\n";
         for(size_t i = 0; i < pairs.size(); i++){
         std::cout<< pairs[i].first << pairs[i].second << std::endl;
     }
 
+    // std::vector<int> minList = extractMin(pairs);
     std::vector<int> maxList = extractMax(pairs);
-    // mergeInsertSort(maxList);
+    
+    Container maxContainer(maxList.begin(), maxList.end());
+    Container sortedMax = mergeInsertSort(maxContainer);
 
-    // insertMin();
-
-
+    //insertMin(pairs, sortedMax);
     
-    
-    
-    
-    
-    
-    // TODO : Implémenter l'algorithme Ford-Johnson
-    // Étapes :
-    // 1. Grouper par paires
-    // 2. Trier chaque paire
-    // 3. Trier récursivement les plus grands
-    // 4. Insérer les plus petits avec recherche binaire
+    return sortedMax;  // Temporaire - manque encore l'insertion
     }
 
 
