@@ -1,4 +1,5 @@
 #include "PmergeMe.hpp"
+#include <algorithm>  // Pour std::find, std::distance
 
 std::vector<int> parseNumbers(int argc, char **argv){
     std::vector<int> Vnumbers;
@@ -74,6 +75,31 @@ std::vector<int> extractMin(std::vector<std::pair<int, int> > &pairs){
 }
 
 
+template <typename Container>
+void binaryInsert(Container &sortedMax, int minToInsert, int maxIndex){
+    // Recherche binaire limitée jusqu'à maxIndex
+    typename Container::iterator pos = std::lower_bound(
+        sortedMax.begin(), 
+        sortedMax.begin() + maxIndex + 1,  // Limite la recherche !
+        minToInsert
+    );
+    
+    // Insérer à cette position
+    sortedMax.insert(pos, minToInsert);
+}
+template <typename Container>
+int findIndex(Container &sortedMax, int associatedMax){
+    // Trouver l'élément exact avec std::find
+    typename Container::iterator pos = std::find(
+        sortedMax.begin(), 
+        sortedMax.end(), 
+        associatedMax
+    );
+    
+    // Convertir l'itérateur en index
+    return std::distance(sortedMax.begin(), pos);
+}
+
 
 template <typename Container>
 void insertMin(std::vector<std::pair<int, int> >& pairs, Container& sortedMax) {
@@ -90,20 +116,37 @@ void insertMin(std::vector<std::pair<int, int> >& pairs, Container& sortedMax) {
     }
 }
 
+
+template <typename Container>
+void insertSorted(Container& sortedContainer, int element) {
+    // En C++98 : type explicite pour l'itérateur
+    typename Container::iterator pos = std::lower_bound(
+        sortedContainer.begin(), 
+        sortedContainer.end(), 
+        element
+    );
+    
+    // Insère l'élément à cette position
+    sortedContainer.insert(pos, element);
+}
+
 template <typename Container>
 Container mergeInsertSort(Container& container){
+    
+    bool isImpair = false;
+    int impairElement = 0;
 
     if (container.size() <= 1)
         return container;
-    std::vector<std::pair<int , int> > pairs = formPairs(container);
-    
-    std::cout << "before sort\n";
-    for(size_t i = 0; i < pairs.size(); i++){
-        std::cout<< pairs[i].first << pairs[i].second << std::endl;
+    if (container.size() % 2 != 0){
+        isImpair = true;
+        impairElement = container.back();  // Pas de "int" - on assigne à la variable existante
     }
 
+    std::vector<std::pair<int , int> > pairs = formPairs(container);
+
    sortPairs(pairs);  // sortPairs modifie pairs en place
-    std::cout << "after sort\n";
+    std::cout << "\npairs formed\n";
         for(size_t i = 0; i < pairs.size(); i++){
         std::cout<< pairs[i].first << pairs[i].second << std::endl;
     }
@@ -111,12 +154,23 @@ Container mergeInsertSort(Container& container){
     // std::vector<int> minList = extractMin(pairs);
     std::vector<int> maxList = extractMax(pairs);
     
+
     Container maxContainer(maxList.begin(), maxList.end());
+
+    std::cout << "\nmax container\n";
+    for (size_t i = 0; i < maxContainer.size(); i++){
+        std::cout << maxContainer[i];
+    }
     Container sortedMax = mergeInsertSort(maxContainer);
 
-    //insertMin(pairs, sortedMax);
+    insertMin(pairs, sortedMax);
+    if (isImpair){
+        std::cout << "\n impair element\n\n";
+        std::cout << impairElement << "\n" << std::endl;
+        insertSorted(sortedMax, impairElement);
+    }
     
     return sortedMax;  // Temporaire - manque encore l'insertion
-    }
+}
 
 

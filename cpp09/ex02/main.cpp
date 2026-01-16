@@ -10,12 +10,21 @@ int main(int argc, char **argv){
     */
     
     std::vector<int> Vnumbers = parseNumbers(argc, argv);
+    std::cout << "print before\n";
     printBefore(Vnumbers);
     std::deque<int> Dnumbers(Vnumbers.begin(), Vnumbers.end());
     
     std::vector<int> sortedV = mergeInsertSort(Vnumbers);
     std::deque<int> sortedD = mergeInsertSort(Dnumbers);
+
+
+    std::cout << "\nprint after\n";
+    for(size_t i = 0; i < sortedV.size(); i++){
+
+        std::cout << sortedV[i] << std::endl;
+    }
     
+
     // TODO: Afficher les résultats et les temps de tri
 
     return 0;
