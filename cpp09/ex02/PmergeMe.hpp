@@ -8,23 +8,26 @@
 #include <stdexcept>
 #include <vector>
 #include <deque>
-#include <utility> 
+#include <utility>
+#include <ctime>        // Pour mesurer le temps en C++98
+#include <sys/time.h>   // Pour gettimeofday (plus précis)
 
-// Structure pour garder l'association max-min pendant Ford-Johnson
-struct PairInfo {
-    int max;
-    int min;
-    
-    // Constructeur pour faciliter la création
-    PairInfo(int maximum, int minimum) : max(maximum), min(minimum) {}
-}; 
+// ═══════════════════════════════════════════════════════════════
+// DÉCLARATIONS DES FONCTIONS
+// ═══════════════════════════════════════════════════════════════
 
+// Parse et valide les arguments de la ligne de commande
 std::vector<int> parseNumbers(int argc, char **argv);
-void printBefore(std::vector<int> Vnumbers);
 
+// Affiche un conteneur (vector ou deque)
+template<typename Container>
+void printContainer(const Container& container);
+
+// Algorithme Ford-Johnson (Merge-Insert Sort)
 template <typename Container>
-Container mergeInsertSort(Container& container);  // ← Corrigé pour retourner Container
+Container mergeInsertSort(Container& container);
 
+// Fonctions utilitaires pour le tri
 void sortPairs(std::vector<std::pair<int, int> > &pairs);
 std::vector<int> extractMax(std::vector<std::pair<int, int> > &pairs);
 std::vector<int> extractMin(std::vector<std::pair<int, int> > &pairs);
