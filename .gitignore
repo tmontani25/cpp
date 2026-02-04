@@ -1,0 +1,32 @@
+# Fichiers compilés
+*.o
+*.a
+*.so
+*.dylib
+
+# Exécutables
+btc
+RPN
+PmergeMe
+easy
+Span
+mutant
+
+# PDFs (sujets)
+*.pdf
+
+# Fichiers de test
+*.txt.replace
+
+# Fichiers système macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+
+# Fichiers temporaires
+*~
+*.swp
+*.swo

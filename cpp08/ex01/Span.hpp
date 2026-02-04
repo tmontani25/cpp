@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <cmath>
 #include <set>
+#include <vector>
+#include <algorithm>
 
 // class qui stocke des int
 // maximum de int N
@@ -69,7 +71,7 @@ class Span{
         std::sort(vcopy.begin(), vcopy.end());
         int minSpan = std::abs(vcopy[1] - vcopy[0]); // comparaison de la premiere paire
         for(size_t i = 1; i < vcopy.size() - 1; i++){
-            int diff = std::abs(vcopy[i+1] - vcopy[1]); // valeure absolue de la diffence entre le 2e element et le 3e, 3e et 4e ainsi de suite
+            int diff = std::abs(vcopy[i+1] - vcopy[i]); // valeure absolue de la diffence entre elements consecutifs
             if (diff < minSpan){
                 minSpan = diff;
             }

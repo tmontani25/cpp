@@ -44,8 +44,8 @@ try {
     std::cout << "Erreur : " << e.what() << std::endl;
 }
 
-std::cout << "it address: " << &it << std::endl;
-std::cout << "\nvalue found: "<< *it << std::endl;
+std::cout << "itL address: " << &itL << std::endl;
+std::cout << "\nvalue found: "<< *itL << std::endl;
 
 std::cout << "\n\nTEST AVEC UNE UNE VALEUR QUI N'EST PAS DANS LE CONTAINER l\n";
 
