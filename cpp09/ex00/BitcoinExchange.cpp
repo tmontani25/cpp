@@ -74,7 +74,7 @@ bool BitcoinExchange::parseLine(std::string line, char delimiter, std::string &d
     std::string priceStr;
     size_t pos = line.find(delimiter);
     if (pos == std::string::npos) {  // No delimiter
-        std::cerr<< "Error bad input => " << line << "\n";
+        std::cerr<< "Error bad input => " << line << std::endl;
         return false;  // Erreur de format
     }
     date = trim(line.substr(0, pos)); // enlever les espaces avant et apres | 
