@@ -32,6 +32,10 @@ void sortPairs(std::vector<std::pair<int, int> > &pairs);
 std::vector<int> extractMax(std::vector<std::pair<int, int> > &pairs);
 std::vector<int> extractMin(std::vector<std::pair<int, int> > &pairs);
 
+// Fonctions pour l'ordre d'insertion de Jacobsthal (vrai Ford-Johnson)
+std::vector<size_t> generateJacobsthalSequence(size_t n);
+std::vector<size_t> getJacobsthalInsertionOrder(size_t n);
+
 
 
 #include "PmergeMe.cpp"

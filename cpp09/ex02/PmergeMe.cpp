@@ -1,6 +1,62 @@
 #include "PmergeMe.hpp"
 #include <algorithm>  // Pour std::find, std::distance
 
+// ═══════════════════════════════════════════════════════════════════════════
+// GÉNÉRATION DE LA SÉQUENCE DE JACOBSTHAL
+// ═══════════════════════════════════════════════════════════════════════════
+// Les nombres de Jacobsthal : 0, 1, 1, 3, 5, 11, 21, 43, 85, ...
+// Formule : J(n) = J(n-1) + 2*J(n-2)
+// Ces nombres déterminent l'ordre optimal d'insertion dans Ford-Johnson
+std::vector<size_t> generateJacobsthalSequence(size_t n) {
+    std::vector<size_t> jacobsthal;
+    jacobsthal.push_back(0);
+    jacobsthal.push_back(1);
+
+    while (jacobsthal.back() < n) {
+        size_t next = jacobsthal[jacobsthal.size() - 1] + 2 * jacobsthal[jacobsthal.size() - 2];
+        jacobsthal.push_back(next);
+    }
+    return jacobsthal;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GÉNÉRATION DE L'ORDRE D'INSERTION DE JACOBSTHAL
+// ═══════════════════════════════════════════════════════════════════════════
+// L'ordre d'insertion pour n éléments :
+// - Groupe 1: index 0 (b1)
+// - Groupe 2: index 2, 1 (b3, b2)
+// - Groupe 3: index 4, 3 (b5, b4)
+// - Groupe 4: index 10, 9, 8, 7, 6, 5 (b11, b10, ..., b6)
+// Cet ordre minimise le nombre de comparaisons
+std::vector<size_t> getJacobsthalInsertionOrder(size_t n) {
+    if (n == 0)
+        return std::vector<size_t>();
+
+    std::vector<size_t> order;
+    std::vector<size_t> jacobsthal = generateJacobsthalSequence(n);
+
+    // Le premier élément (index 0) est toujours inséré en premier
+    order.push_back(0);
+
+    // Parcourir les groupes de Jacobsthal
+    for (size_t k = 2; k < jacobsthal.size(); k++) {
+        size_t current = jacobsthal[k];
+        size_t prev = jacobsthal[k - 1];
+
+        // Insérer de current vers prev+1 (en décroissant)
+        // mais limité à n-1 (indices valides)
+        size_t start = (current > n) ? n : current;
+
+        for (size_t i = start; i > prev; i--) {
+            if (i > 0 && i <= n) {
+                order.push_back(i - 1); // -1 car indices commencent à 0
+            }
+        }
+    }
+
+    return order;
+}
+
 // Fonction qui parse et valide les arguments de la ligne de commande
 // Retourne un vector d'entiers positifs
 // Lance une exception si les entrées sont invalides
@@ -26,7 +82,7 @@ std::vector<int> parseNumbers(int argc, char **argv){
 
         // Convertir la chaîne en entier
         std::stringstream ss(str);
-        if (!(ss >> num)) // Si la conversion échoue, renvoyer une erreur
+        if (!(ss >> num)) // Si la conversion échoue, renvoyer une erreur stream = false
             throw std::runtime_error("Error");
 
         // Vérifier que le nombre est positif (sécurité supplémentaire)
@@ -132,21 +188,72 @@ int findIndex(Container &sortedMax, int associatedMax){
 }
 
 
-// ÉTAPE 5 : Insérer les "petits" dans la liste des "grands" triée
-// Pour chaque paire (min, max), on sait que min ≤ max
-// Donc on limite la recherche binaire jusqu'à la position de max
-// Cela réduit le nombre de comparaisons (optimisation Ford-Johnson)
+// ═══════════════════════════════════════════════════════════════════════════
+// RECONSTRUCTION DES PAIRES ORDONNÉES
+// ═══════════════════════════════════════════════════════════════════════════
+// Après le tri récursif des max, on doit reconstruire les paires
+// dans l'ordre des max triés pour maintenir l'association min/max
 template <typename Container>
-void insertMin(std::vector<std::pair<int, int> >& pairs, Container& sortedMax) {
-    for (size_t i = 0; i < pairs.size(); i++) {
-        int minToInsert = pairs[i].first;     // Le "petit" à insérer
-        int associatedMax = pairs[i].second;   // Son "grand" associé
+std::vector<std::pair<int, int> > reorderPairs(
+    std::vector<std::pair<int, int> >& originalPairs,
+    Container& sortedMax)
+{
+    std::vector<std::pair<int, int> > orderedPairs;
 
-        // Trouver où se trouve le "grand" dans la liste triée
-        int maxIndex = findIndex(sortedMax, associatedMax);
+    // Pour chaque max dans l'ordre trié, retrouver sa paire originale
+    for (size_t i = 0; i < sortedMax.size(); i++) {
+        int maxVal = sortedMax[i];
 
-        // Insérer le "petit" en ne cherchant que jusqu'à son "grand"
-        binaryInsert(sortedMax, minToInsert, maxIndex);
+        // Chercher la paire originale avec ce max
+        for (size_t j = 0; j < originalPairs.size(); j++) {
+            if (originalPairs[j].second == maxVal) {
+                orderedPairs.push_back(originalPairs[j]);
+                // Marquer comme utilisé pour éviter les doublons
+                originalPairs[j].second = -1;
+                break;
+            }
+        }
+    }
+    return orderedPairs;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ÉTAPE 5 : INSERTION AVEC L'ORDRE DE JACOBSTHAL (VRAI FORD-JOHNSON)
+// ═══════════════════════════════════════════════════════════════════════════
+// L'ordre d'insertion de Jacobsthal minimise le nombre de comparaisons
+// car il exploite la propriété que chaque insertion utilise au maximum
+// ⌈log₂(k)⌉ comparaisons où k est la taille de la zone de recherche
+template <typename Container>
+void insertMinJacobsthal(std::vector<std::pair<int, int> >& orderedPairs, Container& mainChain) {
+    if (orderedPairs.empty())
+        return;
+
+    // Le premier min (associé au plus petit max) est inséré au début
+    // car on sait que min_0 <= max_0 et max_0 est en position 0
+    mainChain.insert(mainChain.begin(), orderedPairs[0].first);
+
+    if (orderedPairs.size() == 1)
+        return;
+
+    // Générer l'ordre d'insertion de Jacobsthal pour les éléments restants
+    std::vector<size_t> insertionOrder = getJacobsthalInsertionOrder(orderedPairs.size() - 1);
+
+    for (size_t i = 0; i < insertionOrder.size(); i++) {
+        // L'index dans orderedPairs (décalé de 1 car on a déjà inséré le premier)
+        size_t pairIndex = insertionOrder[i] + 1;
+
+        if (pairIndex >= orderedPairs.size())
+            continue;
+
+        int minToInsert = orderedPairs[pairIndex].first;
+        int associatedMax = orderedPairs[pairIndex].second;
+
+        // Trouver la position du max associé dans la chaîne principale
+        int maxIndex = findIndex(mainChain, associatedMax);
+
+        // La limite de recherche : on sait que min <= max
+        // donc on cherche uniquement jusqu'à la position du max
+        binaryInsert(mainChain, minToInsert, maxIndex);
     }
 }
 
@@ -166,7 +273,7 @@ void insertSorted(Container& sortedContainer, int element) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// ALGORITHME FORD-JOHNSON (MERGE-INSERT SORT)
+// ALGORITHME FORD-JOHNSON (MERGE-INSERT SORT) - VRAIE IMPLÉMENTATION
 // ═══════════════════════════════════════════════════════════════════════════
 // Algorithme de tri optimal qui minimise le nombre de comparaisons
 // Complexité : O(n log n) avec un nombre de comparaisons proche du minimum théorique
@@ -174,13 +281,12 @@ void insertSorted(Container& sortedContainer, int element) {
 // PRINCIPE :
 // 1. Former des paires et trier chaque paire localement
 // 2. Extraire les "grands" et les trier récursivement (RÉCURSION)
-// 3. Insérer les "petits" avec recherche binaire optimisée
-// 4. Gérer l'élément impair s'il existe
+// 3. Reconstruire l'association min/max après le tri
+// 4. Insérer les "petits" selon l'ORDRE DE JACOBSTHAL (clé de Ford-Johnson)
+// 5. Gérer l'élément impair s'il existe
 //
-// Exemple : [5, 2, 8, 1, 9, 3, 7, 4]
-//   Paires : [(2,5), (1,8), (3,9), (4,7)]
-//   Max : [5, 8, 9, 7] → tri récursif → [5, 7, 8, 9]
-//   Insertion des min : [2, 1, 3, 4] → [1, 2, 3, 4, 5, 7, 8, 9]
+// L'ordre de Jacobsthal (1, 3, 2, 5, 4, 11, 10, 9, 8, 7, 6, ...)
+// garantit que chaque insertion utilise au maximum ⌈log₂(k)⌉ comparaisons
 // ═══════════════════════════════════════════════════════════════════════════
 template <typename Container>
 Container mergeInsertSort(Container& container){
@@ -200,10 +306,13 @@ Container mergeInsertSort(Container& container){
     }
 
     // ÉTAPE 1 : Former les paires d'éléments
-    std::vector<std::pair<int , int> > pairs = formPairs(container);
+    std::vector<std::pair<int, int> > pairs = formPairs(container);
 
     // ÉTAPE 2 : Trier chaque paire (min dans .first, max dans .second)
     sortPairs(pairs);
+
+    // Copie des paires pour la reconstruction après tri
+    std::vector<std::pair<int, int> > pairsCopy = pairs;
 
     // ÉTAPE 3 : Extraire la liste des "grands"
     std::vector<int> maxList = extractMax(pairs);
@@ -212,13 +321,17 @@ Container mergeInsertSort(Container& container){
     Container maxContainer(maxList.begin(), maxList.end());
 
     // ÉTAPE 4 : APPEL RÉCURSIF pour trier les "grands"
-    // C'est le cœur de l'algorithme !
     Container sortedMax = mergeInsertSort(maxContainer);
 
-    // ÉTAPE 5 : Insérer les "petits" avec recherche binaire optimisée
-    insertMin(pairs, sortedMax);
+    // ÉTAPE 5 : Reconstruire les paires dans l'ordre des max triés
+    // Cela maintient l'association entre chaque min et son max
+    std::vector<std::pair<int, int> > orderedPairs = reorderPairs(pairsCopy, sortedMax);
 
-    // ÉTAPE 6 : Insérer l'élément impair s'il existe
+    // ÉTAPE 6 : Insérer les "petits" selon l'ordre de JACOBSTHAL
+    // C'est LA différence clé avec une implémentation naïve !
+    insertMinJacobsthal(orderedPairs, sortedMax);
+
+    // ÉTAPE 7 : Insérer l'élément impair s'il existe
     if (isImpair){
         insertSorted(sortedMax, impairElement);
     }

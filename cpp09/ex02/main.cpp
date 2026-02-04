@@ -55,8 +55,13 @@ int main(int argc, char **argv){
         // ═══════════════════════════════════════════════════════════
         // AFFICHAGE DE LA SÉQUENCE APRÈS LE TRI
         // ═══════════════════════════════════════════════════════════
-        std::cout << "After:   ";
+        std::cout << "After:\n   ";
+        std::cout << "vector:";
         printContainer(sortedV);
+        std::cout << "\n   deque: ";
+        printContainer(sortedD);
+
+
 
         // ═══════════════════════════════════════════════════════════
         // AFFICHAGE DES TEMPS D'EXÉCUTION
