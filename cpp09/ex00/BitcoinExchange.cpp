@@ -4,7 +4,7 @@ bool BitcoinExchange::isBissextile(const std::string &year){
 
     int yearValue = atoi(year.c_str());
 
-    if(yearValue % 400 == 0 || yearValue % 4 == 0)
+    if ((yearValue % 4 == 0 && yearValue % 100 != 0) || yearValue % 400 == 0)
         return true;
     
     return false;
@@ -152,7 +152,7 @@ bool BitcoinExchange::checkDateFormat(const std::string &date){
             return false;
     }
     else if(monthValue == 2){ // fevrier check annee bisextile
-        std::string year = date.substr(0, 3);
+        std::string year = date.substr(0, 4);
         if(isBissextile(year)){
             if (dayValue > 29)
                 return false;
