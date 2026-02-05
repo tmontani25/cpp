@@ -31,6 +31,8 @@ class Span{
         }
         return *this;
     }
+
+    ~Span(){}
  
 
     // constructeur assignation =

@@ -66,15 +66,6 @@ for (MutantStack<std::string>::iterator it = str.begin(); it != str.end(); ++it)
         std::cout << *it << " ";
     }
     std::cout << std::endl;
-
-
-
-
-
 return 0;
-
-
-
-
 }
 
